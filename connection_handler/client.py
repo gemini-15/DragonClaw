@@ -10,7 +10,7 @@ class client:
     target_port = "8080"        # Default port
     buffer = b''
 
-    def __init__(self, transportType, target_host, target_port) -> self:
+    def __init__(self, transportType, target_host, target_port):
         self.transportType = transportType
         self.target_host = target_host
         self.target_port = target_port
