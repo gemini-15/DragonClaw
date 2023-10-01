@@ -1,16 +1,21 @@
 import asyncio
 import logging
+from typing import Optional
 
 from common import TransportType
 
 IP_BROADCAST = "0.0.0.0"
-PORT = 4444
+DEFAULT_PORT = 4444
 
 class server:
 
 
-    def __init__(self, server_host: str, server_port: int, loop: asyncio.AbstractEventLoop):
+    def __init__(self,  loop: asyncio.AbstractEventLoop, server_host: Optional[str] = None, server_port: Optional[int] = None):
+        if server_host is None:
+            self.__server_host = IP_BROADCAST
         self.__server_host = server_host
+        if server_port is None:
+            self.__server_port = DEFAULT_PORT
         self.__server_port = server_port
         self.__server_loop = loop
 
