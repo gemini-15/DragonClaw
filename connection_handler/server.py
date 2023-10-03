@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from typing import Optional
 
 
@@ -34,13 +35,13 @@ class Server:
         return self.__server_loop
     
     
-    async def start(self):
+    def start(self):
         '''
         Starts the server
         '''
         try: 
-            self.server = await asyncio.start_server(self.client_handler, self.server_host, self.server_port)
-            logging.info("Server listening at : {}:{}", self.server_host, self.server_port)
+            self.server = asyncio.start_server(self.accept_connection, self.server_host, self.server_port)
+            logging.info(f"Server listening at : {self.server_host}:{self.server_port}")
             self.server_loop.run_until_complete(self.server)
             self.server_loop.run_forever()
         except Exception as e:
@@ -49,9 +50,30 @@ class Server:
             logging.info("Keyboard interrupt.")
         
 
-    def client_handler(self, client_reader: asyncio.StreamReader, client_writer: asyncio.StreamWriter):
+    def accept_connection(self, client_reader: asyncio.StreamReader, client_writer: asyncio.StreamWriter):
         '''
         Client handler when getting a new connection. 
         '''
-        logging.info("New remote connection.")
-        line = str()
+        logging.info("New remote connection registered.")
+        
+        task = asyncio.Task(self.client_handler(client_reader, client_writer))
+        client_info = client_writer.get_extra_info('peername')
+        logging.info(client_info)
+
+
+    async def client_handler(self, client_reader: asyncio.StreamReader, client_writer: asyncio.StreamWriter):
+        """
+        Handles the incoming messages from the client. 
+
+        """
+        while True:
+            command = sys.stdin.readline()
+            client_writer.write(command.encode())
+            await client_writer.drain()
+            client_message = str((await client_reader.read(1024)).decode("utf8"))
+
+            if client_message.startswith("quit"):
+                break
+            print(f'{client_message}')
+        
+        logging.info("Client disconnected.")
