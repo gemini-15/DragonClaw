@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "dragonclaw"
+version = "0.0.1"
+description = "DragonClawing to that shell"
+authors = ["Yass <bargach.y@gmail.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+typer = "^0.9.0"
+rich = "^13.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
