@@ -1,14 +1,19 @@
 use tokio;
 use std::error::Error;
-use clap;
-use tcp_handler::{listener, connect};
 
 mod tcp_handler;
+mod cli;
+
+use tcp_handler::{connect, listener};
+use cli::{runDragonClaw};
+
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let cmd = clap::Command::new("dc")
-        .bin_name("dragonclaw");
+    let _cmd = clap::Command::new("dc")
+        .bin_name("dragon_claw");
 
+    println!("Hello world");
     Ok(())
 }
